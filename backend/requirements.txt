@@ -34,7 +34,7 @@ pydantic_settings
 pydantic
 coqui-tts
 torch>=1.9.0
-torchaudio
+torchaudio>=0.1
 numpy
 unidecode
 inflect
