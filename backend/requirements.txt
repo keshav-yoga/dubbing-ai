@@ -1,0 +1,55 @@
+# Existing:
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+alembic
+ffmpeg-python
+python-multipart
+boto3
+pydantic
+requests
+
+# For ASR + Diarization + Language ID
+openai-whisper  # or pip install git+https://github.com/openai/whisper.git
+pyannote.audio==2.1.1
+langid
+torch
+torchaudio
+numpy
+
+
+# For grammar correction (LanguageTool or HF-based approach)
+language-tool-python==2.7.0
+
+# For translation with MarianMT (Hugging Face)
+transformers==4.28.0
+sentencepiece==0.1.99
+torch>=1.9.0
+
+# Alternatively, you could use googletrans, deep-translator, or custom APIs
+# e.g. googletrans==4.0.0-rc1
+
+
+coqui-tts==0.11.1
+torch>=1.9.0
+torchaudio>=0.9.0
+numpy
+unidecode
+inflect
+
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+ffmpeg-python
+python-multipart
+pydantic
+requests
+# ... rest of your existing dependencies
+
+# For advanced lip-sync, you may need:
+# gentle or other alignment libraries (optional)
+pydub
+pyloudnorm
+
