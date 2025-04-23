@@ -169,6 +169,25 @@ cython_debug/
 
 # Ruff stuff:
 .ruff_cache/
+# Node
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+backend/app/__pycache__/
+
+# Docker
+.env.local
+docker-compose.override.yml
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
 
 # PyPI configuration file
 .pypirc
