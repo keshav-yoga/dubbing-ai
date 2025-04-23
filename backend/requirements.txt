@@ -30,8 +30,9 @@ torch>=1.9.0
 # Alternatively, you could use googletrans, deep-translator, or custom APIs
 # e.g. googletrans==4.0.0-rc1
 
-
-coqui-tts>=0.26.0
+pydantic_settings
+pydantic
+coqui-tts
 torch>=1.9.0
 torchaudio>=0.9.0
 numpy
