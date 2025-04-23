@@ -1,54 +1,43 @@
-# Existing:
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-alembic
-ffmpeg-python
-python-multipart
-boto3
-pydantic
-requests
+# Web API & ORM
+fastapi==0.95.2
+uvicorn==0.23.2
+sqlalchemy==2.0.22
+alembic==1.11.2
+python-multipart==0.0.6
 
-# For ASR + Diarization + Language ID
-openai-whisper  # or pip install git+https://github.com/openai/whisper.git
-pyannote.audio==2.1.1
-langid
-torch
-numpy
+# HTTP & AWS
+requests==2.31.0
+boto3==1.26.161
 
+# FFmpeg wrapper
+ffmpeg-python==0.2.0
 
-# For grammar correction (LanguageTool or HF-based approach)
-language-tool-python==2.7.0
+# Data & NLP
+numpy==1.25.2
+langid==1.1.6
+language-tool-python==2.7.1
 
-# For translation with MarianMT (Hugging Face)
-transformers==4.28.0
+# Transformers & Translation
+transformers==4.31.0
 sentencepiece==0.1.99
-torch>=1.9.0
 
-# Alternatively, you could use googletrans, deep-translator, or custom APIs
-# e.g. googletrans==4.0.0-rc1
+# Whisper ASR
+openai-whisper==20230314
 
-pydantic_settings
-pydantic
-coqui-tts
-torch>=1.9.0
-numpy
-unidecode
-inflect
+# Speaker diarization
+pyannote.audio==2.1.1
 
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-ffmpeg-python
-python-multipart
-pydantic
-requests
-# ... rest of your existing dependencies
+# PyTorch (for Whisper, pyannote, TTS)
+torch==2.0.1
+torchaudio==2.0.2
 
-# For advanced lip-sync, you may need:
-# gentle or other alignment libraries (optional)
-pydub
-pyloudnorm
+# Coqui TTS
+TTS==0.11.2
 
+# Subtitle & audio post-processing
+srt==3.5.4
+pydub==0.25.1
+pyloudnorm==0.2.1
+
+# TextGrid parsing
+textgrid==1.5.1
