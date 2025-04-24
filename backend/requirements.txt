@@ -18,7 +18,7 @@ boto3>=1.26.0
  numpy>=1.23.0
  scipy>=1.9.0
  tqdm>=4.64.0
-
+ pydantic_settings
 # ─────── ML / Diarization / ASR ───────
  torch>=2.0.1
  torchaudio>=2.0.1
