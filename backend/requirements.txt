@@ -1,27 +1,36 @@
 alembic==1.11.2
 antlr4-python3-runtime>=4.8
 boto3>=1.26.0
-coqui-tts
-fastapi>=0.95.2
-ffmpeg-python>=0.2.0
-langid>=1.1.6
-language-tool-python==2.7.0
-numpy>=1.23.0
-openai-whisper>=20230314
-pydantic>=1.10.7
-pydantic_settings
-pydub>=0.25.1
-pyloudnorm>=0.2.1
-psycopg2-binary>=2.9.6
-python-multipart>=0.0.6
-requests>=2.31.0
-sentencepiece>=0.1.99
-srt>=3.5.4
-sqlalchemy>=1.4.0
-textgrid>=1.0.3
-torch>=1.9.0
-torchaudio>=0.9.0
-transformers>=4.28.0
-unidecode>=1.3.6
-uvicorn[standard]>=0.22.0
-pyannote.audio==2.1.1
+# ─────── Web framework & DB ───────
+ fastapi>=0.95.0
+ uvicorn[standard]>=0.22.0
+ SQLAlchemy>=2.0.0
+ psycopg2-binary>=2.9.6       # for Postgres; omit or replace if using another DB
+ python-dotenv>=1.0.0         # load .env configs
+ python-multipart>=0.0.6      # form-data uploads
+ aiofiles>=23.1.0             # async file I/O
+
+# ─────── Audio / Video processing ───────
+ ffmpeg-python>=0.3.0
+ pydub>=0.25.1
+ soundfile>=0.12.1
+ librosa>=0.10.0
+ numpy>=1.23.0
+ scipy>=1.9.0
+ tqdm>=4.64.0
+
+# ─────── ML / Diarization / ASR ───────
+ torch>=2.0.1
+ torchaudio>=2.0.1
+ pyannote-audio==3.3.2
+ huggingface-hub>=0.14.0
+ transformers>=4.33.0
+ sentencepiece>=0.1.99
+ pytorch-metric-learning>=1.4.0
+ rich>=10.12.0
+
+# ─────── (Optional) Extras ───────
+ python-jose>=3.3.0           # JWT auth
+ passlib[bcrypt]>=1.7.4       # password hashing
+ croniter>=1.3.15             # server-side scheduling
+ pyasn1
