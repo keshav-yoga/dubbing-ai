@@ -1,0 +1,25 @@
+# Core ML / audio
+torch>=2.0.1
+torchaudio>=2.0.2
+whisper>=1.0.1
+faster-whisper>=1.1.0
+
+# Transformers & tokenizers
+transformers>=4.29.0
+sentencepiece>=0.1.98
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.1
+webrtcvad>=2.0.10
+sox>=1.4.1
+
+# Video processing (for multiplexing audio/video)
+moviepy>=1.0.3
+opencv-python>=4.8.0.74
+
+# General utilities
+numpy>=1.25.0
+scipy>=1.11.0
+pandas>=2.0.0
+python-dotenv>=1.0.0
