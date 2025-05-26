@@ -1,41 +1,55 @@
-# ────────── Core Web & DB ──────────
+# FastAPI web framework
 git+https://github.com/tiangolo/fastapi.git@master#egg=fastapi
+
+# ASGI server
 git+https://github.com/encode/uvicorn.git@master#egg=uvicorn
-git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=SQLAlchemy
+
+# ORM & migrations
+git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=sqlalchemy
 git+https://github.com/sqlalchemy/alembic.git@master#egg=alembic
-git+https://github.com/psycopg/psycopg2.git@master#egg=psycopg2-binary
-git+https://github.com/boto/boto3.git@master#egg=boto3
+
+# PostgreSQL driver (psycopg v3)
+git+https://github.com/psycopg/psycopg.git@main#egg=psycopg
+
+# File uploads & HTTP
 git+https://github.com/tiangolo/python-multipart.git@master#egg=python-multipart
-git+https://github.com/Tinche/aiofiles.git@master#egg=aiofiles
-git+https://github.com/theskumar/python-dotenv.git@master#egg=python-dotenv
+git+https://github.com/psf/requests.git@master#egg=requests
+git+https://github.com/boto/boto3.git@master#egg=boto3
 
-# ────────── Audio / Video processing ──────────
+# FFmpeg-Python bindings
 git+https://github.com/kkroening/ffmpeg-python.git@master#egg=ffmpeg-python
-git+https://github.com/jiaaro/pydub.git@master#egg=pydub
-git+https://github.com/bastibe/python-soundfile.git@master#egg=SoundFile
-git+https://github.com/librosa/librosa.git@main#egg=librosa
-git+https://github.com/numpy/numpy.git@main#egg=numpy
-git+https://github.com/scipy/scipy.git@main#egg=scipy
-git+https://github.com/tqdm/tqdm.git@master#egg=tqdm
-git+https://github.com/pydantic/pydantic-settings.git@main#egg=pydantic-settings
 
-# ────────── Machine-Learning stack ──────────
+# Data validation
+git+https://github.com/samuelcolvin/pydantic.git@master#egg=pydantic
+
+# OpenAI Whisper ASR
+git+https://github.com/openai/whisper.git@main#egg=whisper
+
+# PyTorch & audio
 git+https://github.com/pytorch/pytorch.git@main#egg=torch
 git+https://github.com/pytorch/audio.git@main#egg=torchaudio
-git+https://github.com/openai/whisper.git@main#egg=whisper
+git+https://github.com/librosa/librosa.git@main#egg=librosa
+
+# Language identification
+git+https://github.com/saffsd/langid.py.git@master#egg=langid
+
+# Speaker diarization
 git+https://github.com/pyannote/pyannote-audio.git@main#egg=pyannote.audio
-git+https://github.com/huggingface/huggingface_hub.git@main#egg=huggingface-hub
+
+# Forced alignment
+git+https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner.git@master#egg=montreal-forced-aligner
+git+https://github.com/textgrid/textgrid.git@master#egg=textgrid
+
+# Translation
 git+https://github.com/huggingface/transformers.git@main#egg=transformers
 git+https://github.com/google/sentencepiece.git@master#egg=sentencepiece
-git+https://github.com/KevinMusgrave/pytorch-metric-learning.git@master#egg=pytorch-metric-learning
-git+https://github.com/coqui-ai/TTS.git@main#egg=TTS
-git+https://github.com/pyannote/pyannote-audio.git@main#egg=pyannote-audio  # diarization
-git+https://github.com/antlr/antlr4.git@master#subdirectory=runtime/Python3#egg=antlr4-python3-runtime
 
-# ────────── Utilities & Extras ──────────
-git+https://github.com/Textualize/rich.git@master#egg=rich
-git+https://github.com/mpdavis/python-jose.git@master#egg=python-jose
-git+https://github.com/passlib/passlib.git@master#egg=passlib
-git+https://github.com/pyca/bcrypt.git@main#egg=bcrypt
-git+https://github.com/kiorky/croniter.git@master#egg=croniter
-git+https://github.com/etingof/pyasn1.git@master#egg=pyasn1
+# TTS (Coqui)
+git+https://github.com/coqui-ai/TTS.git@main#egg=TTS
+
+# Audio post-processing
+git+https://github.com/jiaaro/pydub.git@master#egg=pydub
+git+https://github.com/csteinmetz1/pyloudnorm.git@master#egg=pyloudnorm
+
+# Subtitles
+git+https://github.com/kurtmckee/srt.git@main#egg=srt
