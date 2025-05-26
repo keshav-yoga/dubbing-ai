@@ -1,37 +1,41 @@
-alembic==1.11.2
-antlr4-python3-runtime>=4.8
-boto3>=1.26.0
-# ─────── Web framework & DB ───────
- fastapi>=0.95.0
- uvicorn[standard]>=0.22.0
- SQLAlchemy>=2.0.0
- psycopg2-binary>=2.9.6       # for Postgres; omit or replace if using another DB
- python-dotenv>=1.0.0         # load .env configs
- python-multipart>=0.0.6      # form-data uploads
- aiofiles>=23.1.0             # async file I/O
+# ────────── Core Web & DB ──────────
+git+https://github.com/tiangolo/fastapi.git@master#egg=fastapi
+git+https://github.com/encode/uvicorn.git@master#egg=uvicorn
+git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=SQLAlchemy
+git+https://github.com/sqlalchemy/alembic.git@master#egg=alembic
+git+https://github.com/psycopg/psycopg2.git@master#egg=psycopg2-binary
+git+https://github.com/boto/boto3.git@master#egg=boto3
+git+https://github.com/tiangolo/python-multipart.git@master#egg=python-multipart
+git+https://github.com/Tinche/aiofiles.git@master#egg=aiofiles
+git+https://github.com/theskumar/python-dotenv.git@master#egg=python-dotenv
 
-# ─────── Audio / Video processing ───────
- ffmpeg-python>=0.2.0
- pydub>=0.25.1
- soundfile>=0.12.1
- librosa>=0.10.0
- numpy>=1.23.0
- scipy>=1.9.0
- tqdm>=4.64.0
- pydantic_settings
-# ─────── ML / Diarization / ASR ───────
- torch>=2.0.1
- torchaudio>=2.0.1
- pyannote-audio==3.3.2
- huggingface-hub>=0.14.0
- transformers>=4.33.0
- sentencepiece>=0.1.99
- pytorch-metric-learning>=1.4.0
- rich>=10.12.0
-openai-whisper
+# ────────── Audio / Video processing ──────────
+git+https://github.com/kkroening/ffmpeg-python.git@master#egg=ffmpeg-python
+git+https://github.com/jiaaro/pydub.git@master#egg=pydub
+git+https://github.com/bastibe/python-soundfile.git@master#egg=SoundFile
+git+https://github.com/librosa/librosa.git@main#egg=librosa
+git+https://github.com/numpy/numpy.git@main#egg=numpy
+git+https://github.com/scipy/scipy.git@main#egg=scipy
+git+https://github.com/tqdm/tqdm.git@master#egg=tqdm
+git+https://github.com/pydantic/pydantic-settings.git@main#egg=pydantic-settings
 
-# ─────── (Optional) Extras ───────
- python-jose>=3.3.0           # JWT auth
- passlib[bcrypt]>=1.7.4       # password hashing
- croniter>=1.3.15             # server-side scheduling
- pyasn1   
+# ────────── Machine-Learning stack ──────────
+git+https://github.com/pytorch/pytorch.git@main#egg=torch
+git+https://github.com/pytorch/audio.git@main#egg=torchaudio
+git+https://github.com/openai/whisper.git@main#egg=whisper
+git+https://github.com/pyannote/pyannote-audio.git@main#egg=pyannote.audio
+git+https://github.com/huggingface/huggingface_hub.git@main#egg=huggingface-hub
+git+https://github.com/huggingface/transformers.git@main#egg=transformers
+git+https://github.com/google/sentencepiece.git@master#egg=sentencepiece
+git+https://github.com/KevinMusgrave/pytorch-metric-learning.git@master#egg=pytorch-metric-learning
+git+https://github.com/coqui-ai/TTS.git@main#egg=TTS
+git+https://github.com/pyannote/pyannote-audio.git@main#egg=pyannote-audio  # diarization
+git+https://github.com/antlr/antlr4.git@master#subdirectory=runtime/Python3#egg=antlr4-python3-runtime
+
+# ────────── Utilities & Extras ──────────
+git+https://github.com/Textualize/rich.git@master#egg=rich
+git+https://github.com/mpdavis/python-jose.git@master#egg=python-jose
+git+https://github.com/passlib/passlib.git@master#egg=passlib
+git+https://github.com/pyca/bcrypt.git@main#egg=bcrypt
+git+https://github.com/kiorky/croniter.git@master#egg=croniter
+git+https://github.com/etingof/pyasn1.git@master#egg=pyasn1
