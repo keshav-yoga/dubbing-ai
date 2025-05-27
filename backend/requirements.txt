@@ -9,7 +9,7 @@ git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=sqlalchemy
 git+https://github.com/sqlalchemy/alembic.git@main#egg=alembic
 
 # PostgreSQL driver (psycopg v3)
- "pip setuptools wheel"
+
 "psycopg[binary,pool]"
 
  psycopg2-binary
