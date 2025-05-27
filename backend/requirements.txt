@@ -6,7 +6,7 @@ git+https://github.com/encode/uvicorn.git@master#egg=uvicorn
 
 # ORM & migrations
 git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=sqlalchemy
-git+https://github.com/sqlalchemy/alembic.git@main#egg=alembic
+git+https://github.com/sqlalchemy/alembic.git@master#egg=alembic
 
 # PostgreSQL driver (psycopg v3)
 
