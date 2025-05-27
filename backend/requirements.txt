@@ -25,7 +25,7 @@ textgrid==1.5                   # Parse MFA TextGrid outputs
 ######################################################################
 # --- Speech Recognition --------------------------------------------
 #  Whiper from OpenAI – public repo, no token required
-openai-whisper @ git+https://github.com/openai/whisper.git@v20230314
+git+https://github.com/openai/whisper.git@v20230314
 
 # --- Translation ----------------------------------------------------
 transformers==4.39.3            # HuggingFace, but we only pull PUBLIC MarianMT models
