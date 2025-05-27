@@ -1,58 +1,53 @@
-# FastAPI web framework
-git+https://github.com/tiangolo/fastapi.git@master#egg=fastapi
+######################################################################
+# Core Web-Backend (FastAPI + DB) ####################################
+######################################################################
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+sqlalchemy==2.0.29
+psycopg2-binary==2.9.9          # PostgreSQL driver; switch to sqlite-browser if no PG
+alembic==1.13.1
+pydantic==2.7.0
+python-multipart==0.0.9
+requests==2.31.0
+boto3==1.34.68                  # Only if you later copy files to S3
 
-# ASGI server
-git+https://github.com/encode/uvicorn.git@master#egg=uvicorn
+######################################################################
+# Media / Audio helpers ##############################################
+######################################################################
+ffmpeg-python==0.2.0            # Python wrapper (FFmpeg exe must be in PATH)
+pydub==0.25.1                   # Easy WAV/MP3 slicing & overlay
+pyloudnorm==0.1.1               # LUFS loudness normalisation
+srt==3.5.3                      # Generate .srt subtitle files
+textgrid==1.5                   # Parse MFA TextGrid outputs
 
-# ORM & migrations
-git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=sqlalchemy
-git+https://github.com/sqlalchemy/alembic.git@main#egg=alembic
-git+https://github.com/psycopg/psycopg
+######################################################################
+# Machine-Learning (ALL Token-Free) ##################################
+######################################################################
+# --- Speech Recognition --------------------------------------------
+#  Whiper from OpenAI – public repo, no token required
+openai-whisper @ git+https://github.com/openai/whisper.git@v20230314
 
-# PostgreSQL driver (psycopg v3)
-git+https://github.com/psycopg/psycopg.git@master#egg=psycopg
-git+https://github.com/psycopg/psycopg.git@psycopg-3.3.0#egg=psycopg
+# --- Translation ----------------------------------------------------
+transformers==4.39.3            # HuggingFace, but we only pull PUBLIC MarianMT models
+sentencepiece==0.1.99
 
+# --- Text Cleaning --------------------------------------------------
+language-tool-python==2.7.0      # Grammar fixes (bundles its own LanguageTool JAR)
+langid==1.1.6                    # Language ID
 
-# File uploads & HTTP
-git+https://github.com/tiangolo/python-multipart.git@master#egg=python-multipart
-git+https://github.com/psf/requests.git@master#egg=requests
-git+https://github.com/boto/boto3.git@master#egg=boto3
+# --- Text-to-Speech -------------------------------------------------
+TTS==0.22.0                      # Coqui TTS – offline voices
 
-# FFmpeg-Python bindings
-git+https://github.com/kkroening/ffmpeg-python.git@master#egg=ffmpeg-python
+# --- Forced Alignment / Lip-Sync -----------------------------------
+montreal-forced-aligner==2.2.4   # CLI & Python helpers (token-free acoustic models)
 
-# Data validation
-git+https://github.com/samuelcolvin/pydantic.git@master#egg=pydantic
+######################################################################
+# PyTorch + Audio backend (needed by Whisper, Coqui TTS, etc.) #######
+######################################################################
+torch==2.2.1                     # CPU build; install CUDA wheel if you have GPU
+torchaudio==2.2.1
+numpy==1.26.4
 
-# OpenAI Whisper ASR
-git+https://github.com/openai/whisper.git@main#egg=whisper
-
-# PyTorch & audio
-git+https://github.com/pytorch/pytorch.git@main#egg=torch
-git+https://github.com/pytorch/audio.git@main#egg=torchaudio
-git+https://github.com/librosa/librosa.git@main#egg=librosa
-
-# Language identification
-git+https://github.com/saffsd/langid.py.git@master#egg=langid
-
-# Speaker diarization
-git+https://github.com/pyannote/pyannote-audio.git@main#egg=pyannote.audio
-
-# Forced alignment
-git+https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner.git@master#egg=montreal-forced-aligner
-git+https://github.com/textgrid/textgrid.git@master#egg=textgrid
-
-# Translation
-git+https://github.com/huggingface/transformers.git@main#egg=transformers
-git+https://github.com/google/sentencepiece.git@master#egg=sentencepiece
-
-# TTS (Coqui)
-git+https://github.com/coqui-ai/TTS.git@main#egg=TTS
-
-# Audio post-processing
-git+https://github.com/jiaaro/pydub.git@master#egg=pydub
-git+https://github.com/csteinmetz1/pyloudnorm.git@master#egg=pyloudnorm
-
-# Subtitles
-git+https://github.com/kurtmckee/srt.git@main#egg=srt
+######################################################################
+# Everything above installs with:  pip install -r requirements.txt  ##
+######################################################################
