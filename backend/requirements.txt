@@ -7,12 +7,10 @@ git+https://github.com/encode/uvicorn.git@master#egg=uvicorn
 # ORM & migrations
 git+https://github.com/sqlalchemy/sqlalchemy.git@main#egg=sqlalchemy
 git+https://github.com/sqlalchemy/alembic.git@main#egg=alembic
+psycopg2-binary
 
 # PostgreSQL driver (psycopg v3)
-
-"psycopg[binary,pool]"
-
- psycopg2-binary
+git+https://github.com/psycopg/psycopg.git@master#egg=psycopg
 git+https://github.com/psycopg/psycopg.git@psycopg-3.3.0#egg=psycopg
 
 
