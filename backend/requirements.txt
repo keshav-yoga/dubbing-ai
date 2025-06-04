@@ -19,6 +19,7 @@ pydub==0.25.1                   # Easy WAV/MP3 slicing & overlay
 pyloudnorm==0.1.1               # LUFS loudness normalisation
 srt==3.5.3                      # Generate .srt subtitle files
 textgrid==1.5                   # Parse MFA TextGrid outputs
+soundfile==0.12.1               # Needed for Sarvabhasha TTS output
 
 ######################################################################
 # Machine-Learning (ALL Token-Free) ##################################

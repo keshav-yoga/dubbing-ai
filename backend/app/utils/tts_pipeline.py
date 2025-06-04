@@ -6,6 +6,7 @@ import shutil
 import tempfile
 import torch
 from TTS.api import TTS
+from .sarvabhasha_processor import SarvabhashaProcessor
 
 class TTSProcessor:
     """
@@ -18,7 +19,7 @@ class TTSProcessor:
         use_gpu: Use CUDA if available
         """
         self.use_gpu = use_gpu and torch.cuda.is_available()
-
+        
         if model_path:
             self.tts = TTS(
                 model_path=model_path,
@@ -29,6 +30,9 @@ class TTSProcessor:
         else:
             self.tts = None
             print("No local TTS model configured. You can use an external provider instead.")
+
+        # Sarvabhasha processor is optional and initialised lazily
+        self.sarva = SarvabhashaProcessor()
 
     def synthesize_local(self, text: str, output_path: str, speaker_idx: int = None, emotion: str = None):
         """
@@ -69,6 +73,9 @@ class TTSProcessor:
             self.synthesize_local(text, output_path, speaker_idx=speaker_idx, emotion=emotion)
         elif voice_name.startswith("google_"):
             self.synthesize_external_google(text, output_path, voice_name=voice_name)
+        elif voice_name.startswith("sarva_"):
+            lang = voice_name.replace("sarva_", "") or "en"
+            self.sarva.synthesize(text, output_path, lang=lang)
         else:
             # default or error
             raise ValueError(f"Unknown voice_name pattern: {voice_name}")
