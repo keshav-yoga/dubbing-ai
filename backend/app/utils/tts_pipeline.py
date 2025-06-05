@@ -1,76 +1,46 @@
 # backend/app/utils/tts_pipeline.py
+"""Utility for synthesising speech using Sarvabhasha TTS."""
 
-import os
-import uuid
-import shutil
-import tempfile
+from importlib import import_module
+from pathlib import Path
+import soundfile as sf
 import torch
-from TTS.api import TTS
+from sarvabhasha_tts import config
+
 
 class TTSProcessor:
-    """
-    Manages local TTS synthesis using Coqui TTS or placeholders for other providers.
-    """
-    def __init__(self, model_path: str = None, vocoder_path: str = None, use_gpu: bool = True):
-        """
-        model_path: Path or name for the Coqui TTS model
-        vocoder_path: If separate vocoder needed
-        use_gpu: Use CUDA if available
-        """
-        self.use_gpu = use_gpu and torch.cuda.is_available()
+    """Simple wrapper around Sarvabhasha TTS pipeline."""
 
-        if model_path:
-            self.tts = TTS(
-                model_path=model_path,
-                vocoder_path=vocoder_path,
-                progress_bar=False,
-                gpu=self.use_gpu
-            )
-        else:
-            self.tts = None
-            print("No local TTS model configured. You can use an external provider instead.")
+    def __init__(self, device: str | None = None):
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self._instances: dict[str, object] = {}
 
-    def synthesize_local(self, text: str, output_path: str, speaker_idx: int = None, emotion: str = None):
-        """
-        Synthesize speech from text using a local Coqui TTS model,
-        saving to output_path (WAV).
-        speaker_idx: for multi-speaker models
-        emotion: if supported
-        """
-        if not self.tts:
-            raise ValueError("Local TTS model not loaded. Provide model_path to TTSProcessor.")
+    def _get(self, name: str, *args):
+        if name not in self._instances:
+            module_path, cls_name = config.PIPELINES[name].split(":")
+            cls = getattr(import_module(module_path), cls_name)
+            self._instances[name] = cls(*args)
+        return self._instances[name]
 
-        # Example of controlling speaker, emotion, or other parameters if the model supports them
-        self.tts.tts_to_file(
-            text=text,
-            file_path=output_path,
-            speaker=speaker_idx,
-            emotion=emotion
-        )
+    def synthesize(self, text: str, output_path: str, lang: str = "en", speaker_wav: str | None = None) -> str:
+        """Synthesize ``text`` and save to ``output_path``."""
+        lang = lang if lang != "auto" else self._get("langid")(text)
+        toks = self._get("tokenizer", lang)(text)
+        toks_norm = self._get("normalizer", lang)(toks)
+        text_norm = self._get("transliterate", lang)(" ".join(toks_norm))
+        phonemes = self._get("g2p", lang)(text_norm.split())
 
-    def synthesize_external_google(self, text: str, output_path: str, voice_name: str):
-        """
-        Example placeholder for Google TTS or other cloud-based TTS.
-        """
-        # Here you'd call the google-cloud-texttospeech client,
-        # then write the output to output_path.
-        pass
+        style = None
+        if speaker_wav:
+            style = self._get("speaker_embed")(speaker_wav)
 
-    def synthesize_text(self, text: str, output_path: str, voice_name: str, speaker_label: str = "", emotion: str = None):
-        """
-        High-level interface. 
-        If voice_name indicates a local Coqui voice, do local.
-        If it indicates a cloud voice (like 'google_en-US-Wavenet-F'), do an external call.
-        """
-        # Example logic to distinguish
-        if voice_name.startswith("local_coqui"):
-            # parse out speaker index, etc.
-            speaker_idx = 0
-            self.synthesize_local(text, output_path, speaker_idx=speaker_idx, emotion=emotion)
-        elif voice_name.startswith("google_"):
-            self.synthesize_external_google(text, output_path, voice_name=voice_name)
-        else:
-            # default or error
-            raise ValueError(f"Unknown voice_name pattern: {voice_name}")
-        
+        wav = self._get("acoustic", model_path=None, device=self.device)(phonemes, style, lang)
+        if isinstance(wav, torch.Tensor):
+            wav = wav.cpu().numpy()
+
+        sf.write(output_path, wav, 24000)
         return output_path
+
+    # Backwards compatibility ----------------------------------------------
+    def synthesize_text(self, text: str, output_path: str, voice_name: str = "sarvabhasha", speaker_label: str = "", emotion: str | None = None) -> str:
+        return self.synthesize(text, output_path, lang="en")

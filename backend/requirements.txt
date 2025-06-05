@@ -36,7 +36,7 @@ language-tool-python==2.7.0      # Grammar fixes (bundles its own LanguageTool J
 langid==1.1.6                    # Language ID
 
 # --- Text-to-Speech -------------------------------------------------
-TTS                      # Coqui TTS – offline voices
+git+https://github.com/keshav-yoga/TTS2.git   # Sarvabhasha TTS engine
 
 # --- Forced Alignment / Lip-Sync -----------------------------------
 montreal-forced-aligner==2.2.4   # CLI & Python helpers (token-free acoustic models)
