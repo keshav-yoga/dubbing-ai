@@ -13,17 +13,13 @@ from app.config import settings
 
 router = APIRouter()
 
-# Create a TTSProcessor instance with some local model paths or pass them from config
-tts_processor = TTSProcessor(
-    model_path=settings.COQUI_MODEL_PATH if hasattr(settings, "COQUI_MODEL_PATH") else None,
-    vocoder_path=settings.COQUI_VOCODER_PATH if hasattr(settings, "COQUI_VOCODER_PATH") else None,
-    use_gpu=True
-)
+# Create a TTSProcessor instance using Sarvabhasha TTS
+tts_processor = TTSProcessor()
 
 @router.post("/generate/{processed_script_id}")
 def generate_tts(
     processed_script_id: int,
-    voice_name: str = "local_coqui_default",
+    voice_name: str = "xtts_default",
     db: Session = Depends(get_db)
 ):
     """
