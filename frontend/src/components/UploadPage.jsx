@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { uploadVideo } from "../api.js";
+import { uploadVideo } from "../api.jsx";
 
 export default function UploadPage({ onUploaded }) {
   const [title, setTitle] = useState("");
