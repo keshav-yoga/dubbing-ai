@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   runASR, runScriptProcess, runTTS,
   runLipSync, runMixing, runFinalOutput
-} from "../api.js";
+} from "../api.jsx";
 
 export default function PipelineButtons({ project }) {
   const [log, setLog] = useState("");
