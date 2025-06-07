@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../api.js";
+import api from "../api.jsx";
 import PipelineButtons from "../components/PipelineButtons.jsx";
 import VideoPlayer from "../components/VideoPlayer.jsx";
 

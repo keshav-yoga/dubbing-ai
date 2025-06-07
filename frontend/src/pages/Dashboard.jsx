@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listProjects } from "../api.js";
+import { listProjects } from "../api.jsx";
 import UploadPage from "../components/UploadPage.jsx";
 import ProjectCard from "../components/ProjectCard.jsx";
 
