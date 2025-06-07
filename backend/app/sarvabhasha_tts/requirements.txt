@@ -4,7 +4,7 @@ numpy==1.26.4
 fasttext==0.9.2
 nltk==3.9.0
 indic-nlp-library==0.81
-indic-numtowords==2.0.2
+indic-numtowords==1.0.2
 num2words==0.5.13
 g2p-en==2.1.0
 ai4bharat-phonemizer==0.3.0
