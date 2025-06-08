@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { listProjects } from "../api.jsx";
-import UploadPage from "../components/UploadPage.jsx";
-import ProjectCard from "../components/ProjectCard.jsx";
+import { listProjects } from "../src/api.jsx";
+// Components live under the `src/` directory
+import UploadPage from "../src/components/UploadPage.jsx";
+import ProjectCard from "../src/components/ProjectCard.jsx";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
