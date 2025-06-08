@@ -5,23 +5,33 @@ from typing import List
 
 from app.database import get_db
 from app.models import Project, Transcription, TranscriptionSegment, ProcessedScript, ProcessedSegment
-from app.utils.script_pipeline import ScriptProcessor
+try:
+    from app.utils.script_pipeline import ScriptProcessor
+except Exception as e:
+    ScriptProcessor = None
+    _script_import_error = e
+else:
+    _script_import_error = None
 
 router = APIRouter()
-script_processor = ScriptProcessor()
+script_processor = ScriptProcessor() if ScriptProcessor else None
 
 @router.post("/process/{project_id}")
-def process_script(
-    project_id: int,
-    target_languages: List[str],  # e.g. ["en", "hi", "te", "ja"]
-    db: Session = Depends(get_db)
-):
+def process_script(␊
+    project_id: int,␊
+    target_languages: List[str],  # e.g. ["en", "hi", "te", "ja"]␊
+    db: Session = Depends(get_db)␊
+):␊
     """
     1) Fetch the latest Transcription for the project.
     2) For each segment, do grammar cleaning & translation for each requested language.
     3) Save the processed results in DB (ProcessedScript & ProcessedSegment).
     4) Return a structured JSON of processed scripts.
     """
+     if script_processor is None:
+        msg = f"Script processor unavailable: {_script_import_error}" if _script_import_error else "Script processor not initialised"
+        raise HTTPException(status_code=500, detail=msg)
+
     # 1) Validate project & transcription
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
