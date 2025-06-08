@@ -8,23 +8,29 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import LipSyncJob, LipSyncSegment, AudioMixJob, AudioMixSegment
-from app.utils.mix_pipeline import MixPipeline
+try:
+    from app.utils.mix_pipeline import MixPipeline
+except Exception as e:
+    MixPipeline = None
+    _mix_import_error = e
+else:
+    _mix_import_error = None
 from app.config import settings
 
 router = APIRouter()
 
-mix_pipeline = MixPipeline(
-    target_lufs=getattr(settings, "MIX_TARGET_LUFS", -23.0)
-)
+mix_pipeline = MixPipeline(␊
+    target_lufs=getattr(settings, "MIX_TARGET_LUFS", -23.0)␊
+) if MixPipeline else None
 
 @router.post("/process/{lip_sync_job_id}")
-def mix_audio(
-    lip_sync_job_id: int,
+def mix_audio(␊
+    lip_sync_job_id: int,␊
     background_audio_path: str = None,  # If user wants to override
     background_volume_db: float = 0.0,
     dialogue_volume_db: float = 0.0,
-    db: Session = Depends(get_db)
-):
+   db: Session = Depends(get_db)␊
+):␊
     """
     1) Find the LipSyncJob containing the aligned audio segments.
     2) Use the original background audio track or a user-provided track.
@@ -33,6 +39,10 @@ def mix_audio(
     5) Store result in AudioMixJob & AudioMixSegment
     6) Return the final path
     """
+    if mix_pipeline is None:
+        msg = f"Mix pipeline unavailable: {_mix_import_error}" if _mix_import_error else "Mix pipeline not initialised"
+        raise HTTPException(status_code=500, detail=msg)
+
     lip_sync_job = db.query(LipSyncJob).filter(LipSyncJob.id == lip_sync_job_id).first()
     if not lip_sync_job:
         raise HTTPException(status_code=404, detail="LipSyncJob not found.")
