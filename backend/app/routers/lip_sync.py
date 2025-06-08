@@ -7,19 +7,27 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import TTSGeneration, TTSSegment, LipSyncJob, LipSyncSegment
-from app.utils.lip_sync_pipeline import LipSyncPipeline
+try:
+    from app.utils.lip_sync_pipeline import LipSyncPipeline
+except Exception as e:
+    LipSyncPipeline = None
+    _lip_import_error = e
+else:
+    _lip_import_error = None
 from app.config import settings
 
 router = APIRouter()
 
-lip_sync_pipeline = LipSyncPipeline(
-    mfa_command=getattr(settings, "MFA_COMMAND", "mfa"),
-    acoustic_model_path=getattr(settings, "MFA_ACOUSTIC_MODEL", "/path/to/acoustic_model"),
-    dictionary_path=getattr(settings, "MFA_DICTIONARY_PATH", "/path/to/dictionary")
-)
+lip_sync_pipeline = None
+if LipSyncPipeline:
+    lip_sync_pipeline = LipSyncPipeline(
+        mfa_command=getattr(settings, "MFA_COMMAND", "mfa"),
+        acoustic_model_path=getattr(settings, "MFA_ACOUSTIC_MODEL", "/path/to/acoustic_model"),
+        dictionary_path=getattr(settings, "MFA_DICTIONARY_PATH", "/path/to/dictionary")
+    )
 
 @router.post("/process/{tts_generation_id}")
-def process_lip_sync(tts_generation_id: int, db: Session = Depends(get_db)):
+def process_lip_sync(tts_generation_id: int, db: Session = Depends(get_db)):␊
     """
     1) Look up the TTSGeneration with all TTS segments.
     2) For each TTS segment, we have:
@@ -30,6 +38,10 @@ def process_lip_sync(tts_generation_id: int, db: Session = Depends(get_db)):
     4) Save results in LipSyncJob & LipSyncSegment.
     5) Return the final aligned segments.
     """
+        if lip_sync_pipeline is None:
+        msg = f"Lip-sync pipeline unavailable: {_lip_import_error}" if _lip_import_error else "Lip-sync pipeline not initialised"
+        raise HTTPException(status_code=500, detail=msg)
+
     tts_gen = db.query(TTSGeneration).filter(TTSGeneration.id == tts_generation_id).first()
     if not tts_gen:
         raise HTTPException(status_code=404, detail="TTSGeneration not found.")
