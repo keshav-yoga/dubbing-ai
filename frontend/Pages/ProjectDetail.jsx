@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../api.jsx";
-import PipelineButtons from "../components/PipelineButtons.jsx";
-import VideoPlayer from "../components/VideoPlayer.jsx";
+import api from "../src/api.jsx";
+// Components live under the `src/` directory
+import PipelineButtons from "../src/components/PipelineButtons.jsx";
+import VideoPlayer from "../src/components/VideoPlayer.jsx";
 
 export default function ProjectDetail() {
   const { id } = useParams();
