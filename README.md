@@ -19,9 +19,11 @@ You can also run the services without Docker.
 
 ```bash
 cd backend
+rm -rf .venv
 python -m venv .venv
 source .venv/bin/activate  # On Windows use .venv\Scripts\activate
-pip install -r requirements.txt pydantic-settings
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt 
 uvicorn app.main:app --reload
 ```
 
