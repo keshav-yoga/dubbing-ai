@@ -42,7 +42,7 @@ indic-nlp-library==0.81
 indic-numtowords==1.0.2
 num2words==0.5.13
 g2p-en==2.1.0
-pip install git+https://github.com/AI4Bharat/indic-phonemizer.git
+git+https://github.com/AI4Bharat/indic-phonemizer.git
 styletts2-pkg==0.1.8
 xtts==3.0.0
 hifi-gan==0.9.0
