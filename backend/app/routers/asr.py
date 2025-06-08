@@ -6,19 +6,29 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Project, UploadedFile, Transcription, TranscriptionSegment
-from app.utils.asr_pipeline import ASRPipeline
+try:
+    from app.utils.asr_pipeline import ASRPipeline
+except Exception as e:  # pragma: no cover - optional heavy deps
+    ASRPipeline = None
+    _asr_import_error = e
+else:
+    _asr_import_error = None
 
 router = APIRouter()
-asr_pipeline = ASRPipeline(use_gpu=True)  # or False if no GPU
+asr_pipeline = ASRPipeline(use_gpu=True) if ASRPipeline else None  # lazy if deps missing
 
 @router.post("/process/{project_id}")
-def process_asr(project_id: int, db: Session = Depends(get_db)):
+def process_asr(project_id: int, db: Session = Depends(get_db)):␊
     """
     1. Fetch the Project & audio file (file_type="audio").
     2. Run the ASR pipeline (speaker diarization, language ID, transcription).
     3. Store the results in DB.
     4. Return the final JSON array of segments.
     """
+      if asr_pipeline is None:
+        msg = f"ASR pipeline unavailable: {_asr_import_error}" if _asr_import_error else "ASR pipeline not initialised"
+        raise HTTPException(status_code=500, detail=msg)
+
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
