@@ -8,26 +8,36 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import ProcessedScript, ProcessedSegment, TTSGeneration, TTSSegment
-from app.utils.tts_pipeline import TTSProcessor
+try:
+    from app.utils.tts_pipeline import TTSProcessor
+except Exception as e:
+    TTSProcessor = None
+    _tts_import_error = e
+else:
+    _tts_import_error = None
 from app.config import settings
 
 router = APIRouter()
 
-# Create a TTSProcessor instance using Sarvabhasha TTS
-tts_processor = TTSProcessor()
+# Create a TTSProcessor instance lazily if deps are available
+tts_processor = TTSProcessor() if TTSProcessor else None
 
 @router.post("/generate/{processed_script_id}")
-def generate_tts(
-    processed_script_id: int,
-    voice_name: str = "xtts_default",
-    db: Session = Depends(get_db)
-):
+def generate_tts(␊
+    processed_script_id: int,␊
+    voice_name: str = "xtts_default",␊
+    db: Session = Depends(get_db)␊
+):␊
     """
     1) Look up the ProcessedScript (which has text segments).
     2) For each segment, generate TTS audio.
     3) Store TTS results in TTSGeneration & TTSSegment in DB.
     4) Return references to the audio files.
     """
+    if tts_processor is None:
+        msg = f"TTS pipeline unavailable: {_tts_import_error}" if _tts_import_error else "TTS pipeline not initialised"
+        raise HTTPException(status_code=500, detail=msg)
+
     processed_script = db.query(ProcessedScript).filter(
         ProcessedScript.id == processed_script_id
     ).first()
