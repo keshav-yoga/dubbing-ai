@@ -3,7 +3,12 @@
 from functools import lru_cache
 from typing import List
 from g2p_en import G2p
-from indic_phonemizer import phonemize as indic_g2p
+try:
+    from indic_phonemizer import phonemize as indic_g2p
+    SUPPORTED_LANGS = getattr(indic_g2p, "SUPPORTED_LANGS", [])
+except Exception:  # library optional
+    indic_g2p = None
+    SUPPORTED_LANGS = []
 import subprocess, tempfile, os
 
 @lru_cache
