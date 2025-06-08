@@ -12,25 +12,35 @@ from app.models import (
     FinalOutputJob, SubtitleFile,
     ProcessedScript, ProcessedSegment
 )
-from app.utils.final_output_pipeline import FinalOutputPipeline
+try:
+    from app.utils.final_output_pipeline import FinalOutputPipeline
+except Exception as e:
+    FinalOutputPipeline = None
+    _final_import_error = e
+else:
+    _final_import_error = None
 from app.config import settings
 
-router = APIRouter()
-final_pipeline = FinalOutputPipeline()
+router = APIRouter()␊
+final_pipeline = FinalOutputPipeline() if FinalOutputPipeline else None
 
 @router.post("/generate/{audio_mix_job_id}")
-def generate_final_output(
+def generate_final_output(␊
     audio_mix_job_id: int,
     include_subtitles: bool = True,
     subtitle_language_codes: Optional[List[str]] = None,
     db: Session = Depends(get_db)
-):
+):␊
     """
     1) Look up AudioMixJob -> get final mixed audio track
     2) Mux it with the original video
     3) Optionally generate subtitles (SRT) for specified language(s)
     4) Return final video path + any subtitle paths
     """
+      if final_pipeline is None:
+        msg = f"Final output pipeline unavailable: {_final_import_error}" if _final_import_error else "Final output pipeline not initialised"
+        raise HTTPException(status_code=500, detail=msg)
+
     mix_job = db.query(AudioMixJob).filter(AudioMixJob.id == audio_mix_job_id).first()
     if not mix_job:
         raise HTTPException(status_code=404, detail="AudioMixJob not found.")
