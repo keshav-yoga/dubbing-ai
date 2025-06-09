@@ -1,12 +1,20 @@
-# frontend/Dockerfile
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-COPY . .
-RUN yarn build
+# -------- Build & runtime in one (Node 20 LTS) --------
+FROM node:20-alpine AS base
 
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /usr/src/app
+COPY frontend/package*.json ./
+RUN npm ci --omit=dev
+
+COPY frontend ./
+# If it's Vite/React
+RUN npm run build
+
+# If it's Next.js with static export:
+# RUN npm run build && npm run export
+
+# For Vite or static export we can use nginx or serve.
+# Here we'll use the lightweight 'serve' package:
+RUN npm add -g serve
+
+EXPOSE 3000
+CMD ["serve", "-s", "dist", "-l", "3000"]
