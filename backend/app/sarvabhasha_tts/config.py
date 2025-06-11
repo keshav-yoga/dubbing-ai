@@ -17,7 +17,7 @@ PIPELINES = {
     "transliterate": "sarvabhasha_tts.preprocess.transliterate:Transliterator",
     "g2p": "sarvabhasha_tts.phonemize.g2p_router:G2PRouter",
     "prosody": "sarvabhasha_tts.acoustic.styletts2_backend:StyleEncoder",
-    "acoustic": "sarvabhasha_tts.acoustic.xtts_backend:XttsSynthesiser",
+    "acoustic": "sarvabhasha_tts.acoustic.coqui_backend:CoquiSynthesiser",
     "vocoder": "sarvabhasha_tts.vocoder.hifigan:HiFiGANVocoder",
     "speaker_embed": "sarvabhasha_tts.cloning.speaker_embed:SpeakerEncoder"
 }
