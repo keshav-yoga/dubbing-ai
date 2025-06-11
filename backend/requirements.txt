@@ -1,9 +1,4 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/backend/requirements.txt b/backend/requirements.txt
-index 33c08dd18c35aae69427f7f1d51f2e13c4141350..d82282f1235deca23d6d95762bec690421dbd482 100644
---- a/backend/requirements.txt
-+++ b/backend/requirements.txt
-@@ -3,77 +3,77 @@
+
  ######################################################################
  fastapi==0.110.0
  uvicorn[standard]==0.29.0
@@ -29,7 +24,6 @@ index 33c08dd18c35aae69427f7f1d51f2e13c4141350..d82282f1235deca23d6d95762bec6904
  ######################################################################
  # --- Speech Recognition --------------------------------------------
  #  Whiper from OpenAI – public repo, no token required
--git+https://github.com/openai/whisper.git@v20230314
 +git+https://github.com/openai/whisper/archive/refs/tags/v20230314.zip
  
  # --- Translation ----------------------------------------------------
