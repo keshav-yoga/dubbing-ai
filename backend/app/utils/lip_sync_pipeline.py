@@ -152,18 +152,18 @@ class LipSyncPipeline:
                             "start": interval.minTime,
                             "end": interval.maxTime
                         })
-            elif tier.name.lower() in ["phones", "phonemes"]:
-                for interval in tier.intervals:
-                    if interval.mark.strip():
-                        phonemes.append({
-                            "symbol": interval.mark.strip(),
-                            "start": interval.minTime,
-                            "end": interval.maxTime
-                        })
-                                return {
-            "words": words,
-            "phonemes": phonemes
-        }
+        elif tier.name.lower() in ["phones", "phonemes"]:␊
+                for interval in tier.intervals:␊
+                    if interval.mark.strip():␊
+                        phonemes.append({␊
+                            "symbol": interval.mark.strip(),␊
+                            "start": interval.minTime,␊
+                            "end": interval.maxTime␊
+                        })␊
+        return {
+            "words": words,␊
+            "phonemes": phonemes,
+        }␊
 
     def parse_aeneas_json(self, json_path: str) -> Dict[str, Any]:
         """Parse Aeneas alignment JSON into our simple structure."""
