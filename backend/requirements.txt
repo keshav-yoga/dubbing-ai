@@ -1,79 +1,71 @@
-######################################################################
-# Core Web-Backend (FastAPI + DB) ####################################
-######################################################################
-fastapi==0.110.0
-uvicorn[standard]==0.29.0
-sqlalchemy==2.0.29
-psycopg2-binary==2.9.9          # PostgreSQL driver; switch to sqlite-browser if no PG
-alembic==1.13.1
-pydantic==2.7.0
-python-multipart==0.0.9
-requests==2.31.0
-boto3==1.34.68                  # Only if you later copy files to S3
-pydantic-settings
-######################################################################
-# Media / Audio helpers ##############################################
-######################################################################
-ffmpeg-python==0.2.0            # Python wrapper (FFmpeg exe must be in PATH)
-pydub==0.25.1                   # Easy WAV/MP3 slicing & overlay
-pyloudnorm==0.1.1               # LUFS loudness normalisation
-srt==3.5.3                      # Generate .srt subtitle files
-textgrid==1.5                   # Parse MFA TextGrid outputs
-fasttext==0.9.2
-######################################################################
-# Machine-Learning (ALL Token-Free) ##################################
-######################################################################
-# --- Speech Recognition --------------------------------------------
-#  Whiper from OpenAI – public repo, no token required
-git+https://github.com/openai/whisper.git@v20230314
-
-# --- Translation ----------------------------------------------------
-transformers==4.52.3            # HuggingFace, but we only pull PUBLIC MarianMT models
-sentencepiece==0.1.99
-
-# --- Text Cleaning --------------------------------------------------
-language-tool-python==2.7.0      # Grammar fixes (bundles its own LanguageTool JAR)
-langid==1.1.6                    # Language ID
-
-# --- Text-to-Speech -------------------------------------------------
-fasttext==0.9.2
-nltk==3.9.0
-indic-nlp-library==0.81
-indic-numtowords==1.0.2
-num2words==0.5.13
-g2p-en==2.1.0
-phonemizer
-styletts2
-xtts
-hifi-gan==0.9.0
-speechbrain==1.0.0
-
-
-torch==2.4.1
-torchaudio==2.4.1
-numpy==1.26.4
-fasttext==0.9.2
-nltk==3.9.0
-indic-nlp-library==0.81
-indic-numtowords==1.0.2
-num2words==0.5.13
-transformers==4.52.3
-hifi-gan==0.9.0
-speechbrain==1.0.0
-fastapi==0.110.0
-uvicorn==0.30.0
-requests>=2.31.0
-
-# --- Forced Alignment / Lip-Sync -----------------------------------
-montreal-forced-aligner==2.2.4   # CLI & Python helpers (token-free acoustic models)
-
-######################################################################
-# PyTorch + Audio backend (needed by Whisper, Coqui TTS, etc.) #######
-######################################################################
-torch==2.4.1                     # CPU build; install CUDA wheel if you have GPU
-torchaudio==2.4.1
-numpy==1.26.4
-
-######################################################################
-# Everything above installs with:  pip install -r requirements.txt  ##
-######################################################################
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/backend/requirements.txt b/backend/requirements.txt
+index 33c08dd18c35aae69427f7f1d51f2e13c4141350..d82282f1235deca23d6d95762bec690421dbd482 100644
+--- a/backend/requirements.txt
++++ b/backend/requirements.txt
+@@ -3,77 +3,77 @@
+ ######################################################################
+ fastapi==0.110.0
+ uvicorn[standard]==0.29.0
+ sqlalchemy==2.0.29
+ psycopg2-binary==2.9.9          # PostgreSQL driver; switch to sqlite-browser if no PG
+ alembic==1.13.1
+ pydantic==2.7.0
+ python-multipart==0.0.9
+ requests==2.31.0
+ boto3==1.34.68                  # Only if you later copy files to S3
+ pydantic-settings
+ ######################################################################
+ # Media / Audio helpers ##############################################
+ ######################################################################
+ ffmpeg-python==0.2.0            # Python wrapper (FFmpeg exe must be in PATH)
+ pydub==0.25.1                   # Easy WAV/MP3 slicing & overlay
+ pyloudnorm==0.1.1               # LUFS loudness normalisation
+ srt==3.5.3                      # Generate .srt subtitle files
+ textgrid==1.5                   # Parse MFA TextGrid outputs
+ fasttext==0.9.2
+ ######################################################################
+ # Machine-Learning (ALL Token-Free) ##################################
+ ######################################################################
+ # --- Speech Recognition --------------------------------------------
+ #  Whiper from OpenAI – public repo, no token required
+-git+https://github.com/openai/whisper.git@v20230314
++git+https://github.com/openai/whisper/archive/refs/tags/v20230314.zip
+ 
+ # --- Translation ----------------------------------------------------
+ transformers==4.52.3            # HuggingFace, but we only pull PUBLIC MarianMT models
+ sentencepiece==0.1.99
+ 
+ # --- Text Cleaning --------------------------------------------------
+ language-tool-python==2.7.0      # Grammar fixes (bundles its own LanguageTool JAR)
+ langid==1.1.6                    # Language ID
+ 
+ # --- Text-to-Speech -------------------------------------------------
+ fasttext==0.9.2
+ nltk==3.9.0
+ indic-nlp-library==0.81
+ indic-numtowords==1.0.2
+ num2words==0.5.13
++g2p-en==2.1.0
++phonemizer
++styletts2
++TTS==0.22.0
+ hifi-gan==0.9.0
+ speechbrain==1.0.0 
+ # --- Forced Alignment / Lip-Sync -----------------------------------
+   # CLI & Python helpers (token-free acoustic models)
++aeneas==1.7.3                    # Alternative forced aligner
+ 
+ ######################################################################
+ # PyTorch + Audio backend (needed by Whisper, Coqui TTS, etc.) #######
+ ######################################################################
+ torch==2.4.1                     # CPU build; install CUDA wheel if you have GPU
+ torchaudio==2.4.1
+ numpy==1.26.4
+ 
+ ######################################################################
+ # Everything above installs with:  pip install -r requirements.txt  ##
+ ######################################################################
+ 
+EOF
+)
