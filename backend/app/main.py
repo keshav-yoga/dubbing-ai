@@ -3,10 +3,23 @@ from fastapi import FastAPI␊
 from app.config import settings␊
 from app.database import engine␊
 from app.models import Base␊
+
 from app.routers import (␊
     upload, asr, script_processing,␊
     tts, lip_sync, mixing, final_output␊
 )␊
+# backend/app/main.py
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = ["http://localhost:3000"]          # dev frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 ␊
 Base.metadata.create_all(bind=engine)␊
 ␊
