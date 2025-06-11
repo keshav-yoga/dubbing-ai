@@ -24,7 +24,7 @@
  ######################################################################
  # --- Speech Recognition --------------------------------------------
  #  Whiper from OpenAI – public repo, no token required
-+git+https://github.com/openai/whisper/archive/refs/tags/v20230314.zip
+ git+https://github.com/openai/whisper/archive/refs/tags/v20230314.zip
  
  # --- Translation ----------------------------------------------------
  transformers==4.52.3            # HuggingFace, but we only pull PUBLIC MarianMT models
@@ -40,15 +40,15 @@
  indic-nlp-library==0.81
  indic-numtowords==1.0.2
  num2words==0.5.13
-+g2p-en==2.1.0
-+phonemizer
-+styletts2
-+TTS==0.22.0
+ g2p-en==2.1.0
+ phonemizer
+ styletts2
+ TTS==0.22.0
  hifi-gan==0.9.0
  speechbrain==1.0.0 
  # --- Forced Alignment / Lip-Sync -----------------------------------
    # CLI & Python helpers (token-free acoustic models)
-+aeneas==1.7.3                    # Alternative forced aligner
+ aeneas==1.7.3                    # Alternative forced aligner
  
  ######################################################################
  # PyTorch + Audio backend (needed by Whisper, Coqui TTS, etc.) #######
