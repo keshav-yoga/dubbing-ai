@@ -1,34 +1,23 @@
 version: "3.9"
-
 services:
+
   backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    container_name: dubbing_backend
+    build: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/code
     ports:
       - "8000:8000"
-    env_file:
-      - .env    # create .env with DB_URL, API_KEYS, etc.
-    restart: unless-stopped
-    # If you need GPU support with Nvidia:
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - capabilities: [gpu]
 
   frontend:
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-    container_name: dubbing_frontend
+    build: ./frontend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
     depends_on:
       - backend
-    ports:
-      - "3000:3000"
-    restart: unless-stopped
-
-# Optional Postgres/Redis/MinIO blocks go here
-# postgres:
-# ...
