@@ -10,7 +10,7 @@ g2p-en==2.1.0
 ai4bharat-phonemizer==0.3.0
 transformers==4.52.3
 styletts2-pkg==0.1.8
-TTS==0.22.0
+gTTS
 hifi-gan==0.9.0
 speechbrain==1.0.0
 fastapi==0.110.0
