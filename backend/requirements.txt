@@ -25,7 +25,8 @@
  ######################################################################
  # --- Speech Recognition --------------------------------------------
  #  Whiper from OpenAI – public repo, no token required
- git+https://github.com/openai/whisper/archive/refs/tags/v20230314.zip
+ git+https://github.com/openai/whisper.git
+
  
  # --- Translation ----------------------------------------------------
  transformers==4.52.3            # HuggingFace, but we only pull PUBLIC MarianMT models
