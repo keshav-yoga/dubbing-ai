@@ -7,6 +7,12 @@ import tempfile
 import ffmpeg
 from typing import Dict, Any
 
+try:
+    from aeneas.executetask import ExecuteTask
+    from aeneas.task import Task
+except ImportError:  # pragma: no cover - optional dependency
+    ExecuteTask = Task = None
+
 class LipSyncPipeline:
     """
     A pipeline that:
@@ -14,12 +20,14 @@ class LipSyncPipeline:
     2) Time-stretches or pitch-shifts the audio to match on-screen timing.
     """
 
-    def __init__(self, mfa_command: str = "mfa", acoustic_model_path: str = None, dictionary_path: str = None):
+    def __init__(self, aligner: str = "mfa", mfa_command: str = "mfa", acoustic_model_path: str = None, dictionary_path: str = None):
         """
-        mfa_command: the CLI command or path for Montreal Forced Aligner, e.g. 'mfa'
-        acoustic_model_path: path to acoustic model (English, etc.)
-        dictionary_path: path to the pronunciation dictionary
+        aligner: which aligner to use ("mfa" or "aeneas")
+        mfa_command: the CLI command or path for Montreal Forced Aligner
+        acoustic_model_path: path to acoustic model (for MFA)
+        dictionary_path: path to the pronunciation dictionary (for MFA)
         """
+        self.aligner = aligner
         self.mfa_command = mfa_command
         self.acoustic_model_path = acoustic_model_path
         self.dictionary_path = dictionary_path
@@ -27,7 +35,7 @@ class LipSyncPipeline:
     def run_forced_alignment(self, wav_path: str, transcript: str, speaker_name: str = "default") -> Dict[str, Any]:
         """
         1) Write a temporary text file with the transcript.
-        2) Call MFA to produce alignment data (CTM, TextGrid, etc.).
+        2) Call the selected aligner to produce alignment data.
         3) Parse the alignment result to get phoneme start/end times.
 
         Returns a dictionary with alignment info, e.g.
@@ -65,29 +73,42 @@ class LipSyncPipeline:
         local_text_path = os.path.join(text_dir, transcript_filename)
         with open(local_text_path, "w", encoding="utf-8") as f:
             f.write(transcript)
+            
+        # Step 2: call aligner
+        if self.aligner == "aeneas":
+            if ExecuteTask is None:
+                raise ImportError("aeneas is not installed")
+            config = "task_language=eng|is_text_type=plain|os_task_file_format=json"
+            task = Task(config_string=config)
+            task.audio_file_path_absolute = local_audio_path
+            task.text_file_path_absolute = local_text_path
+            ExecuteTask(task).execute()
+            # Save output to file for parsing
+            output_json = os.path.join(output_dir, "aeneas.json")
+            task.output_sync_map_file(output_json)
+            alignment_data = self.parse_aeneas_json(output_json)
+            return alignment_data
+        else:
+            # MFA alignment
+            align_cmd = [
+                self.mfa_command,
+                "align",
+                audio_dir,
+                text_dir,
+                self.dictionary_path,
+                self.acoustic_model_path,
+                output_dir,
+                "--clean"
+            ]
 
-        # Step 2: call MFA
-        # Example command:
-        # mfa align /tmp/audio /tmp/text <dictionary> <acoustic_model> /tmp/output
-        # Real usage: check the MFA version and arguments
-        align_cmd = [
-            self.mfa_command,
-            "align",
-            audio_dir,
-            text_dir,
-            self.dictionary_path,
-            self.acoustic_model_path,
-            output_dir,
-            "--clean"
-        ]
-
-        try:
-            subprocess.run(align_cmd, check=True, capture_output=True)
-        except subprocess.CalledProcessError as e:
-            print("MFA error output:", e.stderr.decode("utf-8"))
-            raise RuntimeError("Montreal Forced Aligner failed.")
+            try:
+                subprocess.run(align_cmd, check=True, capture_output=True)
+            except subprocess.CalledProcessError as e:
+                print("MFA error output:", e.stderr.decode("utf-8"))
+                raise RuntimeError("Montreal Forced Aligner failed.")
 
         # Step 3: parse alignment data
+
         # MFA typically produces TextGrid files in the output directory, e.g. "speaker.TextGrid"
         # We'll parse them to extract phoneme or word-level timings
         textgrid_path = os.path.join(output_dir, f"{speaker_name}_{base_name}.TextGrid")
@@ -139,11 +160,27 @@ class LipSyncPipeline:
                             "start": interval.minTime,
                             "end": interval.maxTime
                         })
-
-        return {
+                                return {
             "words": words,
             "phonemes": phonemes
         }
+
+    def parse_aeneas_json(self, json_path: str) -> Dict[str, Any]:
+        """Parse Aeneas alignment JSON into our simple structure."""
+        import json
+        with open(json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        phonemes = []
+        words = []
+        for fragment in data.get("fragments", []):
+            start = float(fragment.get("begin"))
+            end = float(fragment.get("end"))
+            text = fragment.get("lines", [""])[0]
+            words.append({"text": text, "start": start, "end": end})
+        return {"words": words, "phonemes": phonemes}
+
+       
 
     def time_stretch_audio(self, input_wav: str, output_wav: str, factor: float):
         """
