@@ -1,6 +1,11 @@
-import { RouterProvider } from "react-router-dom";
-import routes from "./routers.jsx";
+import { Routes, Route } from "react-router-dom";
 
 export default function App() {
-  return <RouterProvider router={routes} />;
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/upload" element={<UploadPage />} />
+      {/* add more routes here */}
+    </Routes>
+  );
 }
